@@ -1,6 +1,27 @@
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
+const express = require('express');
 require('dotenv').config();
+
+// Express сервер для Render.com (требует открытый порт)
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+    res.json({
+        status: 'NoHurtCam Telegram Bot is running',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString()
+    });
+});
+
+app.get('/health', (req, res) => {
+    res.json({ status: 'healthy', bot: 'running' });
+});
+
+app.listen(PORT, () => {
+    console.log(`HTTP server running on port ${PORT}`);
+});
 
 // Замените на ваш токен бота от @BotFather
 const BOT_TOKEN = process.env.BOT_TOKEN || 'YOUR_BOT_TOKEN_HERE';
@@ -33,7 +54,7 @@ bot.onText(/\/start/, (msg) => {
     }
     
     const welcomeMessage = `
-🎮 **NoHurtCam Admin Bot**
+🎮 NoHurtCam Admin Bot
 
 Available commands:
 /hwid_add <HWID> - Add HWID to whitelist
@@ -44,10 +65,10 @@ Available commands:
 /stats - Show server statistics
 /help - Show this help message
 
-Your User ID: \`${userId}\`
+Your User ID: ${userId}
 `;
     
-    bot.sendMessage(chatId, welcomeMessage, { parse_mode: 'Markdown' });
+    bot.sendMessage(chatId, welcomeMessage);
 });
 
 // Команда /help
@@ -61,28 +82,28 @@ bot.onText(/\/help/, (msg) => {
     }
     
     const helpMessage = `
-📋 **NoHurtCam Admin Commands**
+📋 NoHurtCam Admin Commands
 
-**HWID Management:**
+HWID Management:
 /hwid_add ABC123DEF456 - Add HWID to authorized list
 /hwid_remove ABC123DEF456 - Remove HWID from list
 /hwid_list - Show all authorized HWIDs
 
-**Music Control:**
+Music Control:
 /play_music - Play RAKAI music for all mod users
 /stop_music - Stop RAKAI music overlay
 
-**Information:**
+Information:
 /stats - Server and user statistics
 /help - Show this help
 
-**How to get HWID:**
+How to get HWID:
 1. Run the mod once
 2. Check console output for "NoHurtCam HWID: XXXXXXXX"
 3. Use /hwid_add command to authorize it
 `;
     
-    bot.sendMessage(chatId, helpMessage, { parse_mode: 'Markdown' });
+    bot.sendMessage(chatId, helpMessage);
 });
 
 // Команда добавления HWID
@@ -108,8 +129,7 @@ bot.onText(/\/hwid_add (.+)/, async (msg, match) => {
         });
         
         if (response.data.success) {
-            bot.sendMessage(chatId, `✅ HWID added successfully!\n\n🔑 HWID: \`${hwid}\`\n👥 Total authorized: ${response.data.totalAuthorized}`, 
-                { parse_mode: 'Markdown' });
+            bot.sendMessage(chatId, `✅ HWID added successfully!\n\n🔑 HWID: ${hwid}\n👥 Total authorized: ${response.data.totalAuthorized}`);
         } else {
             bot.sendMessage(chatId, `❌ Failed to add HWID: ${response.data.error}`);
         }
@@ -138,8 +158,7 @@ bot.onText(/\/hwid_remove (.+)/, async (msg, match) => {
         });
         
         if (response.data.success) {
-            bot.sendMessage(chatId, `✅ HWID removed successfully!\n\n🔑 HWID: \`${hwid}\`\n👥 Total authorized: ${response.data.totalAuthorized}`, 
-                { parse_mode: 'Markdown' });
+            bot.sendMessage(chatId, `✅ HWID removed successfully!\n\n🔑 HWID: ${hwid}\n👥 Total authorized: ${response.data.totalAuthorized}`);
         } else {
             bot.sendMessage(chatId, `❌ ${response.data.message}`);
         }
@@ -173,12 +192,12 @@ bot.onText(/\/hwid_list/, async (msg) => {
             return;
         }
         
-        let message = `📝 **Authorized HWIDs (${hwids.length}):**\n\n`;
+        let message = `📝 Authorized HWIDs (${hwids.length}):\n\n`;
         hwids.forEach((hwid, index) => {
-            message += `${index + 1}. \`${hwid}\`\n`;
+            message += `${index + 1}. ${hwid}\n`;
         });
         
-        bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
+        bot.sendMessage(chatId, message);
     } catch (error) {
         console.error('HWID list error:', error.message);
         bot.sendMessage(chatId, '❌ Server error. Please try again later.');
@@ -256,7 +275,7 @@ bot.onText(/\/stats/, async (msg) => {
         const stats = response.data.stats;
         
         const statsMessage = `
-📊 **Server Statistics**
+📊 Server Statistics
 
 🕐 Uptime: ${Math.floor(stats.uptime / 3600)}h ${Math.floor((stats.uptime % 3600) / 60)}m
 👥 Authorized Users: ${stats.authorizedUsers || 0}
@@ -268,7 +287,7 @@ bot.onText(/\/stats/, async (msg) => {
 🌐 Server: Online ✅
 `;
         
-        bot.sendMessage(chatId, statsMessage, { parse_mode: 'Markdown' });
+        bot.sendMessage(chatId, statsMessage);
     } catch (error) {
         console.error('Stats error:', error.message);
         bot.sendMessage(chatId, '❌ Server error. Please try again later.');
