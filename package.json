@@ -5,6 +5,7 @@
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
+    "worker": "node bot-worker.js",
     "dev": "nodemon bot.js",
     "test": "node test-bot.js"
   },

@@ -24,7 +24,7 @@ app.listen(PORT, () => {
 });
 
 // Замените на ваш токен бота от @BotFather
-const BOT_TOKEN = process.env.BOT_TOKEN || 'YOUR_BOT_TOKEN_HERE';
+const BOT_TOKEN = process.env.BOT_TOKEN || '8664085358:AAFBrWTBnhvA_VzpukG5-Cz9sdTn3cV6ynA';
 const SERVER_URL = process.env.SERVER_URL || 'https://serverml-wv0z.onrender.com';
 const ADMIN_KEY = process.env.ADMIN_KEY || 'admin-secret-key-2024';
 
