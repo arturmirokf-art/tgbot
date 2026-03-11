@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: nohurtcam-telegram-bot
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: BOT_TOKEN
+        value: 8664085358:AAFBrWTBnhvA_VzpukG5-Cz9sdTn3cV6ynA
+      - key: SERVER_URL
+        value: https://serverml-wv0z.onrender.com
+      - key: ADMIN_KEY
+        value: admin-secret-key-2024
+      - key: NODE_ENV
+        value: production
