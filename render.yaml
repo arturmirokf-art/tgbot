@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: funtime-telegram-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    plan: free
+    envVars:
+      - key: BOT_TOKEN
+        value: 8751158476:AAF32VXefnx8ZfEgjaKB_Ps1l-9iA9ZWO1U
+      - key: PORT
+        value: 10000
