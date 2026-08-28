@@ -8,6 +8,7 @@ BOT_USERNAME = os.getenv("BOT_USERNAME", "Ovosh1337bot")
 # Server / Render Settings
 PORT = int(os.getenv("PORT", 8080))
 HOST = os.getenv("HOST", "0.0.0.0")
+WEB_SERVICE_URL = os.getenv("WEB_SERVICE_URL", "https://tgbot-1-jngl.onrender.com")
 
 # Paths
 BASE_DIR = Path(__file__).resolve().parent
